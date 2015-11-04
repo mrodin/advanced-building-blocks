@@ -45,6 +45,19 @@ module Enumerable
     end
     false
   end
+
+  def my_none?
+    if block_given?
+      my_each { |i| return false if yield(i) }
+    else
+      my_each { |i| return false if i}
+    end
+    true
+  end
+
+  def my_count
+
+  end
 end
 
 # %w(a b c d).my_each { |i| puts i }
