@@ -66,6 +66,18 @@ module Enumerable
     end
     count
   end
+
+  def my_map
+    result = []
+    if block_given?
+      self.my_each do |i|
+        result << yield(i)
+      end
+      return result
+    else
+      return self
+    end
+  end
 end
 
 # %w(a b c d).my_each { |i| puts i }
@@ -84,3 +96,6 @@ end
 # puts arr.my_count
 # puts arr.my_count(2)
 # puts arr.my_count{|x| x%2==0}
+
+# a = [ "a", "b", "c", "d" ]
+# print a.my_map {|x| x + "!" }
