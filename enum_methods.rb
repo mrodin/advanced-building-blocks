@@ -55,13 +55,32 @@ module Enumerable
     true
   end
 
-  def my_count
-
+  def my_count(arg = nil)
+    count = 0
+    if block_given?
+      my_each { |i| count += 1 if yield(i) }
+    elsif arg.nil?
+      count = length
+    else
+      my_each { |i| count += 1 if i == arg}
+    end
+    count
   end
 end
 
 # %w(a b c d).my_each { |i| puts i }
+
 # %w(a b c d).my_each_with_index { |i, count| puts "#{count} : #{i}"}
+
 # puts (1..10).my_select { |i|  i % 3 == 0 }
+
 # puts %w{ant bear cat}.my_all? {|word| word.length >= 3}
+
 # puts %w{ant bear cat}.my_any? {|word| word.length >= 3}
+
+# puts %w{ant bear cat}.my_none? {|word| word.length >= 5}
+
+# arr = [1, 2, 4, 2]
+# puts arr.my_count
+# puts arr.my_count(2)
+# puts arr.my_count{|x| x%2==0}
