@@ -50,7 +50,7 @@ module Enumerable
     if block_given?
       my_each { |i| return false if yield(i) }
     else
-      my_each { |i| return false if i}
+      my_each { |i| return false if i }
     end
     true
   end
@@ -62,7 +62,7 @@ module Enumerable
     elsif arg.nil?
       count = length
     else
-      my_each { |i| count += 1 if i == arg}
+      my_each { |i| count += 1 if i == arg }
     end
     count
   end
@@ -77,6 +77,12 @@ module Enumerable
     else
       return self
     end
+  end
+
+  def my_inject(arg = nil)
+    memo = arg.nil? ? first : arg
+    my_each { |i| memo = yield(memo, i) }
+    memo
   end
 end
 
@@ -99,3 +105,9 @@ end
 
 # a = [ "a", "b", "c", "d" ]
 # print a.my_map {|x| x + "!" }
+
+# puts (5..10).my_inject(0) { |sum, n| sum + n }
+# longest = %w{ cat sheep bear }.my_inject do |memo,word|
+#   memo.length > word.length ? memo : word
+# end
+# puts longest
