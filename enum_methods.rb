@@ -93,6 +93,19 @@ module Enumerable
     end
   end
 
+  # Modify your #my_map method to take either a proc or a block, executing the block only if both are supplied
+  # (in which case it would execute both the block AND the proc).
+
+  def my_map3(proc=nil, &block)
+    result = []
+    for i in self
+      result << block.call(proc.call(i)) if proc and block_given?
+      result << proc.call(i) if !block_given?
+      result << yield(i) if !proc and block_given?
+    end
+    return result
+  end
+
   def my_inject(arg = nil)
     memo = arg.nil? ? self.first : arg
     count = arg.nil? ? self.my_count - 1 : self.my_count
