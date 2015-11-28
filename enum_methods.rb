@@ -60,7 +60,7 @@ module Enumerable
     if block_given?
       my_each { |i| count += 1 if yield(i) }
     elsif arg.nil?
-      count = length
+      count = self.length
     else
       my_each { |i| count += 1 if i == arg }
     end
@@ -79,11 +79,35 @@ module Enumerable
     end
   end
 
+  # Modify your #my_map method to take a proc instead.
+
+  def my_map2(&proc)
+    result = []
+    if block_given?
+      self.my_each do |i|
+        result << proc.call(i)
+      end
+      return result
+    else
+      return self
+    end
+  end
+
   def my_inject(arg = nil)
-    memo = arg.nil? ? first : arg
-    my_each { |i| memo = yield(memo, i) }
+    memo = arg.nil? ? self.first : arg
+    count = arg.nil? ? self.my_count - 1 : self.my_count
+    for i in self.last(count)
+      memo = yield(memo, i)
+    end
     memo
   end
+end
+
+# Test your #my_inject by creating a method called #multiply_els which multiplies all the elements of the
+# array together by using #my_inject, e.g. multiply_els([2,4,5]) #=> 40
+
+def multiply_els(arr)
+  arr.my_inject { |memo, i | memo * i }
 end
 
 # %w(a b c d).my_each { |i| puts i }
@@ -106,8 +130,9 @@ end
 # a = [ "a", "b", "c", "d" ]
 # print a.my_map {|x| x + "!" }
 
-# puts (5..10).my_inject(0) { |sum, n| sum + n }
 # longest = %w{ cat sheep bear }.my_inject do |memo,word|
 #   memo.length > word.length ? memo : word
 # end
 # puts longest
+
+# puts multiply_els([2,4,5])
